@@ -1,192 +1,294 @@
-# EcoMind AI — Enterprise Sustainability Intelligence Platform
 
-> **University Major Project**: Complete, production-style, AI-driven energy sustainability decision-support platform for organizations, universities, commercial campuses, hospitals, and industrial facilities.
+EcoMind AI --- Enterprise Sustainability Intelligence Platform
+EcoMind AI is a sustainability intelligence platform designed to help
+organizations analyze energy consumption, forecast future usage,
+identify unusual patterns, estimate electricity-related carbon
+emissions, and explore energy-saving opportunities from one dashboard.
 
-![EcoMind AI Architecture](https://img.shields.io/badge/FastAPI-0.110+-009688?style=flat&logo=fastapi&logoColor=white)
-![React](https://img.shields.io/badge/React-19+-61DAFB?style=flat&logo=react&logoColor=black)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat&logo=typescript&logoColor=white)
-![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.4+-F7931E?style=flat&logo=scikit-learn&logoColor=white)
-![XGBoost](https://img.shields.io/badge/XGBoost-2.0+-2072AF?style=flat&logo=xgboost&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4+-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
+Project status: Development/demo project. Some data sources and
+external integrations may use simulated data. Verify integrations and
+validate real data before operational use.
 
----
+Problem Statement
+Organizations may store energy data across different systems, making it
+difficult to understand consumption trends, identify unusual readings,
+estimate emissions, and plan energy-saving actions. EcoMind AI aims to
+bring energy analytics, forecasting, anomaly detection, carbon
+estimation, and sustainability insights together in one platform.
 
-## 🌟 Executive Summary
+Objectives
+Analyze historical energy-consumption data.
+Forecast future consumption using regression models.
+Identify unusual energy-consumption patterns.
+Estimate electricity-related carbon emissions using an appropriate
+emission factor.
+Present sustainability indicators and recommendations in a
+dashboard.
+Support data-informed decisions about energy efficiency and resource
+use.
+Key Features
+Energy analytics: View consumption trends and summary
+indicators.
+Energy forecasting: Estimate future consumption from historical
+data.
+Anomaly detection: Flag readings or patterns that differ from
+expected usage.
+Carbon estimation: Estimate emissions associated with
+electricity consumption.
+Recommendations: Display rule-based energy-saving suggestions
+and estimated savings where configured.
+Sustainability scoring: Combine selected indicators into a score
+where implemented.
+Visualizations and reports: Present metrics, trends, and
+supported reporting outputs.
+Data integration framework: Designed to support file-based data
+and configured integration adapters.
+How It Works
+Ingest data from a supported file, configured source, or simulator.
+Validate and preprocess the data.
+Analyze consumption trends and summary indicators.
+Forecast usage with configured models.
+Detect anomalies in consumption patterns.
+Estimate emissions using electricity consumption and a suitable
+emission factor.
+Present insights through dashboards, recommendations, and reports.
+Technology Stack
+Layer Technologies
 
-**EcoMind AI** transforms raw, timestamped electricity consumption telemetry, enterprise ERP utility invoices, and real-time IoT smart-meter streams into actionable sustainability intelligence. The platform delivers:
+Frontend React 19, TypeScript, Vite, React
+Router, React Context, Axios,
+Recharts, Tailwind CSS
 
-### Core Data-Science Pipelines
-- **Energy Load Analytics**: Weather correlation, 24-hour diurnal patterns, and periodic load aggregation.
-- **Machine Learning Forecasting**: Multi-step horizon energy demand predictions with prediction intervals comparing **XGBoost Regressors**, **Random Forest Regressors**, and **Seasonal-Naive Baselines**.
-- **Ensemble Anomaly Detection**: Unsupervised **Isolation Forest** algorithms detecting equipment malfunctions, unmanaged weekend HVAC running, and night surges.
-- **Scope 2 Carbon Accounting**: Traceable GHG footprint calculation with standard EPA eGRID / UK Defra / EU-27 emission factors and U.S. EPA greenhouse gas equivalencies.
-- **AI-Driven Conservation Measures**: Data-backed energy conservation roadmaps synthesized from load floors and statistical telemetry evidence.
-- **Conversational Assistant**: Contextual AI assistant delivering factual, citation-backed answers to facility inquiries.
+Backend API Python, FastAPI, Uvicorn, Pydantic
+v2
 
-### Advanced Enterprise Sustainability Modules
-- **Sustainability Scoring Engine**: Explainable, configurable weighted scoring (0–100) with dynamic weight rebalancing for missing indicators, target benchmark normalization, directionality rules, and transparent confidence/coverage metrics.
-- **ESG Reporting Module (GRI & ISSB S2)**: Modular indicator registry for Environmental, Social, and Governance disclosures with provenance tracking (Measured, Estimated, User-Entered, Simulated), structured CSV exports, and dynamic multi-page **ReportLab PDF generation**.
-- **ERP Integration Architecture**: Secure connector ecosystem supporting SAP S/4HANA OData, Oracle NetSuite, Microsoft Dynamics 365, Generic REST, CSV imports, and a synthetic sandbox simulator. Features SSRF firewall protection and secret masking.
-- **IoT & Smart-Meter Integration Engine**: Telemetry ingestion engine strictly distinguishing instantaneous active power (**kW**) from cumulative energy (**kWh**), featuring HTTP REST ingestion, **Paho MQTT v2** subscriber support, threshold breach alerting, and a multi-meter simulator with anomaly injection.
-- **Unified Analytics Pipeline**: Reconciles and merges ERP billing and IoT streams into the core forecasting and anomaly detection engine without duplicate counting.
+Data processing Pandas, NumPy
 
----
+Machine learning Scikit-learn, XGBoost
 
-## 🏛️ Project Architecture
+Database access SQLAlchemy 2.0; SQLite for
+development, PostgreSQL supported
 
-```
-EcoMind-AI/
-├── frontend/                     # React 19 + TypeScript + Vite + Tailwind CSS
-│   ├── public/                   # Static assets & favicons
-│   ├── src/
-│   │   ├── api/                  # Axios HTTP client with typed contracts
-│   │   ├── components/           # Reusable UI cards, tables, badges, modals
-│   │   ├── context/              # Global dataset selection context
-│   │   ├── layouts/              # Shared shell layout with Sidebar & Navbar
-│   │   ├── pages/                # 13 dedicated functional intelligence pages
-│   │   ├── test/                 # Vitest test suite and setup
-│   │   ├── types/                # TypeScript interfaces mirroring API schemas
-│   │   ├── App.tsx               # Client-side routing table
-│   │   ├── main.tsx              # Application entry point
-│   │   └── index.css             # Tailwind design system & utilities
-│   ├── package.json
-│   ├── vite.config.ts
-│   └── .env.example
-│
-├── backend/                      # Python 3.12+ FastAPI backend
-│   ├── app/
-│   │   ├── api/routes/           # REST API endpoints (Analytics, Forecast, ESG, ERP, IoT...)
-│   │   ├── core/                 # Pydantic-Settings environment configuration
-│   │   ├── db/                   # SQLAlchemy engine, session, auto-seeder
-│   │   ├── integrations/         # Enterprise integrations
-│   │   │   ├── erp/              # Connectors (SAP, NetSuite, Dynamics, REST, SSRF guard)
-│   │   │   └── iot/              # Ingestion, MQTT client, Smart-meter simulator
-│   │   ├── ml/                   # Forecaster & Isolation Forest detectors
-│   │   ├── models/               # SQLAlchemy ORM database models
-│   │   ├── schemas/              # Pydantic V2 input & response schemas
-│   │   ├── services/             # Scoring, ESG ReportLab PDF, Unified data layer
-│   │   └── main.py               # FastAPI application lifecycle, CORS, & MQTT init
-│   ├── tests/                    # Pytest automated test suite (12 test suites)
-│   ├── scripts/                  # Synthetic campus data generator
-│   ├── requirements.txt
-│   ├── pytest.ini
-│   └── .env.example
-│
-├── data/
-│   └── sample/                   # 8,760-row commercial campus demonstration CSV
-│
-├── docs/                         # Extended methodology & user manual
-├── start_project.bat             # Dual-terminal Windows launcher
-└── README.md                     # Master documentation
-```
+IoT messaging Paho-MQTT, where configured
 
----
+Reporting ReportLab
+Exact capabilities depend on the code and configuration in your
+checkout.
 
-## ⚡ Launching the Application (Two Independent Terminals)
+Machine Learning and Analytics
+Energy Forecasting --- Regression
+The project architecture includes: - Random Forest Regressor - XGBoost
+Regressor - Seasonal Naive Baseline
 
-### 🖥️ Terminal 1 — Backend (FastAPI API)
+These approaches predict a numerical quantity, such as energy
+consumption. Evaluate them on held-out data and compare them with the
+baseline.
 
-Open **Windows PowerShell** in the project root:
+Anomaly Detection
+Isolation Forest is used in the anomaly-detection design to flag
+observations that differ from typical patterns. An anomaly is a signal
+to investigate, not proof of equipment failure or a specific cause.
 
-```powershell
+Carbon Emission Estimation
+A basic electricity-related estimate is:
+
+Estimated emissions (kg CO₂e) = Electricity consumed (kWh) × Emission factor (kg CO₂e/kWh)
+
+Use an emission factor appropriate to the location, time period, and
+reporting methodology. A demo factor should not automatically be treated
+as universally valid.
+
+Recommendations and Sustainability Score
+Recommendations may be generated using predefined rules. A
+sustainability score may combine selected indicators using configured
+weights. Outputs depend on available data, implemented logic, and
+documented assumptions.
+
+System Architecture
+Frontend: React-based interface for dashboards, visualizations,
+and user interaction.
+Backend: FastAPI endpoints for application logic and data
+access.
+Analytics and ML: Data processing, forecasting models, and
+anomaly detection.
+Persistence: SQLAlchemy-supported database layer; SQLite for
+development and PostgreSQL support.
+Integrations: Configurable data adapters and MQTT-related
+functionality where enabled.
+Reporting: Report generation for supported outputs.
+Data Sources / CSV / Simulator / Configured Integrations
+                         |
+                         v
+                 FastAPI Backend
+                         |
+            +------------+-------------+
+            |            |             |
+            v            v             v
+       Data Processing Forecasting  Anomaly Detection
+            |            |             |
+            +------------+-------------+
+                         |
+              Carbon & Sustainability Logic
+                         |
+                         v
+                 Database / Reports
+                         |
+                         v
+               React Web Dashboard
+Getting Started
+The commands below are a general local-development outline. Confirm the
+exact dependency files, scripts, entry point, and environment variables
+in your repository and in backend/README.md.
+
+Prerequisites
+Python version supported by the backend dependencies
+Node.js and npm compatible with the frontend
+Git
+Optional: PostgreSQL or an MQTT broker if your configuration
+requires them
+1. Clone the Repository
+git clone <YOUR_GITHUB_REPOSITORY_URL>
+cd <YOUR_REPOSITORY_FOLDER>
+Replace the placeholders with your repository URL and folder name.
+
+2. Set Up the Backend
 cd backend
-
-# 1. Create virtual environment (if not already created)
 python -m venv .venv
+Activate the environment:
 
-# 2. Activate virtual environment
+Windows PowerShell
+
 .\.venv\Scripts\Activate.ps1
-# If PowerShell execution policy blocks activation, run once:
-# Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+macOS/Linux
 
-# 3. Install Python dependencies
+source .venv/bin/activate
+Install dependencies using the dependency file included in the
+repository. If it has requirements.txt:
+
 python -m pip install -r requirements.txt
+If an environment template is provided, create a local .env file from
+it and configure the required values. For example, on Windows
+PowerShell:
 
-# 4. Run the FastAPI development server
-python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
-```
+Copy-Item .env.example .env
+Do not commit secrets or real credentials.
 
-> **Backend URLs:**
-> - Swagger Interactive API Docs: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-> - Health Check: [http://127.0.0.1:8000/api/v1/health](http://127.0.0.1:8000/api/v1/health)
+Start the API using the actual application entry point in your project.
+For example, if the app is exposed as app.main:app:
 
----
+uvicorn app.main:app --reload
+FastAPI commonly serves interactive documentation at
+http://127.0.0.1:8000/docs, depending on server configuration.
 
-### 🖥️ Terminal 2 — Frontend (Vite + React)
+3. Set Up the Frontend
+In a second terminal, navigate to the actual frontend directory (for
+example, frontend):
 
-Open a **second Windows PowerShell terminal** in the project root:
-
-```powershell
 cd frontend
-
-# 1. Install frontend packages
-npm install --legacy-peer-deps
-
-# 2. Start Vite development server
+npm install
 npm run dev
-```
+Open the local URL printed by Vite. Configure the frontend API base URL
+using the settings expected by the project.
 
-> **Frontend Dashboard URL:**
-> - Open in your browser: [http://localhost:5173](http://localhost:5173/)
+Note: Directory names, entry-point modules, dependency files, and
+npm scripts above are examples where your repository may differ.
+Confirm them before running these commands.
 
----
+Configuration
+Review the configuration available in your checkout, including:
 
-### 🚀 Optional One-Click Launcher (`start_project.bat`)
+Backend .env.example or equivalent environment template
+Database connection settings
+Frontend API base URL
+Data-source and simulator settings
+MQTT broker settings, if MQTT ingestion is enabled
+Emission-factor values and their sources
+Model and reporting configuration
+Never publish API keys, passwords, production connection strings, or
+private company data in GitHub.
 
-For convenience, double-click **`start_project.bat`** in the root directory to automatically launch both the backend API and frontend Vite server in dedicated command prompt windows.
+Evaluation Metrics
+Forecasting performance should be reported from actual evaluation runs,
+not assumed in advance.
 
----
+Metric Meaning Preferred direction
 
-## 🧪 Automated Testing
+MAE Mean absolute Lower
+difference between
+actual and predicted
+values
 
-### Backend Unit & Integration Tests (Pytest)
-```powershell
-cd backend
-.\.venv\Scripts\pytest.exe -v
-```
-*Tests coverage: health endpoint, in-memory SQLite initialization, demo data loading, XGBoost/Random Forest forecasting, Isolation Forest anomaly scoring, carbon calculators, recommendation rules, conversational assistant, and streaming CSV exports.*
+RMSE Error metric that Lower
+penalizes larger errors
+more strongly
 
-### Frontend Unit Tests (Vitest)
-```powershell
-cd frontend
-npm test
-```
-*Tests coverage: KPICard metrics, Badge status variants, LoadingSpinner feedback, and component rendering.*
+WAPE Total absolute error Lower
+relative to total
+actual consumption
 
----
+R² How well predictions Usually closer to 1,
+explain variation in interpreted in context
+target values
 
-## 📖 Step-by-Step User Workflow
+Do not report a classification-accuracy percentage for the regression
+forecasting task. Report measured results only when the test split,
+target, units, and evaluation procedure are known. For anomaly
+detection, use suitable evaluation data and metrics where labelled
+examples are available.
 
-1. **Access Dashboard**: Navigate to `http://localhost:5173`.
-2. **Instant Demo Mode**: If no dataset is active, click **"Load Demo Campus Dataset"** in the top navigation bar or welcome empty state. This immediately loads 8,760 hourly readings (1 full year) of commercial campus telemetry with HVAC cooling cycles, occupancy rhythms, and injected anomalies.
-3. **Inspect Executive KPIs**: View cumulative electricity consumption, average daily load, active baseload floor, forecasted next 7-day usage, carbon footprint in Metric Tons, and potential annual dollar savings.
-4. **Energy Load Analytics**: Navigate to **Energy Analytics** to explore dual-axis temperature vs energy profiles, 24-hour diurnal weekday vs weekend curves, and monthly/daily aggregations.
-5. **Train Forecast Models**: Navigate to **Consumption Forecasting**. Select your preferred model (e.g. *Random Forest* or *XGBoost*), adjust your forecast horizon (24h to 336h), configure the train/test split slider, and click **"Train & Generate Forecast"**. Review MAE, RMSE, WAPE, and R² scores alongside baseline comparisons and confidence intervals.
-6. **Detect Anomalies**: Navigate to **Anomaly Detection**. Choose a contamination rate (e.g., 2%) and fit the **Isolation Forest** model. Inspect the red anomaly markers on the time series, filter by severity (Critical/High/Medium/Low), and click any row to review diagnostic explanations.
-7. **Scope 2 Carbon Accounting**: Navigate to **Carbon Analytics**. Switch between regional grid presets (US EPA eGRID, UK Defra, EU-27) or enter custom factors to recalculate emissions and view EPA GHG equivalencies (tree seedlings, gasoline gallons, vehicle miles).
-8. **Act on AI Recommendations**: Navigate to **AI Recommendations**. Review data-backed energy conservation measures, inspect observed evidence from telemetry, calculate annual cost savings, and update implementation statuses (*In Progress*, *Implemented*, *Dismissed*).
-9. **Query AI Assistant**: Click the **"AI Assistant"** button in the top navbar to open the interactive drawer. Ask questions like *"What was the total consumption?"*, *"What is forecast for the next 7 days?"*, or *"Which anomalies need investigation?"* to receive factual, citation-backed answers.
-10. **Export & Print**: Navigate to **Reports & Exports** to download validated CSV files for each domain module or click **"Print / Save as PDF"** for executive presentation.
-11. **Explainable Sustainability Scoring**: Navigate to **Sustainability Score** (`/sustainability-score`). Click **"Run Scoring Analysis"** to evaluate energy intensity, carbon intensity, anomaly frequency, renewable share, water, and waste. Inspect pillar scores, dynamic coverage percentages, metric formulas, and actionable improvement recommendations. Click **"Configure Weights & Benchmarks"** to customize indicator weights (validated to sum to 100%).
-12. **GRI / ISSB ESG Disclosures & ReportLab PDF**: Navigate to **ESG Reports** (`/esg-reports`). Select a reporting period and facility boundary, review indicator coverage, and click **"Generate ESG Report"**. Click **"Export ReportLab PDF"** to compile and download a formal multi-page PDF disclosure document, or **"Export Structured CSV"** for machine-readable data.
-13. **ERP Utility Sync & SSRF Firewall**: Navigate to **ERP Integrations** (`/erp-integrations`). Inspect registered connectors (SAP S/4HANA OData, NetSuite, Dynamics 365, CSV Importer). Click **"Test Connection"** on the Simulated SAP connector, then click **"Synchronize Records"** to ingest electricity, water, gas, and waste utility records. View real-time synchronization history, imported record counts, and SSRF security firewall statuses.
-14. **IoT Smart Meters & Live Telemetry Stream**: Navigate to **IoT & Smart Meters** (`/iot-devices`). View connected devices, active power (**kW**), cumulative energy (**kWh**), and telemetry status. Click **"Single Step Simulation"** to stream instantaneous readings, or click **"Inject Peak Surge (&gt; 450 kW)"** to trigger and test real-time threshold breach alerts. Acknowledge and resolve alerts with full audit logs.
+Sustainability and SDGs
+EcoMind AI is intended to support sustainability-related decision-making
+and is relevant to:
 
-> For deep architectural details, mathematical formulations, and security policies, see [docs/ENTERPRISE_MODULES.md](file:///e:/major%20project/docs/ENTERPRISE_MODULES.md).
+SDG 7 --- Affordable and Clean Energy: Encouraging energy
+efficiency.
+SDG 9 --- Industry, Innovation and Infrastructure: Applying
+digital analytics to organizational processes.
+SDG 12 --- Responsible Consumption and Production: Supporting
+informed resource use.
+SDG 13 --- Climate Action: Helping estimate electricity-related
+emissions and consider reduction measures.
+These are intended areas of contribution; the platform alone does not
+guarantee energy savings or emissions reductions.
 
----
+Limitations
+Forecast quality depends on the amount, quality, and
+representativeness of historical data.
+Anomaly detection can produce false positives or miss unusual
+events.
+Carbon estimates depend on energy data and the relevance of the
+emission factor.
+Recommendations and sustainability scores depend on configured
+rules, indicators, and weights.
+Some integrations or demo flows may be simulated; verify which
+sources are actually connected.
+The platform is a decision-support tool, not a substitute for
+engineering inspection or verified emissions accounting.
+Future Enhancements
+Connect and validate live meter, IoT, and enterprise-system data
+sources.
+Add model monitoring and retraining workflows.
+Compare forecasting models with repeatable test datasets and
+documented metrics.
+Store emission factors with source, geography, and reporting-period
+metadata.
+Improve alerting, user roles, audit trails, and report
+customization.
+Validate recommendations and estimated savings against measured
+outcomes.
+Contributing
+Contributions and suggestions are welcome.
 
-## 🛡️ Security & Reliability Best Practices
+Fork the repository.
+Create a feature branch.
+Make and test your changes.
+Open a pull request describing your changes.
+Do not include secrets, private company data, or identifiable
+operational information in commits or issues.
 
-- **Strict Frontend-Backend Separation**: The frontend communicates solely through documented HTTP REST APIs. No ML code executes in TypeScript.
-- **SQLAlchemy ORM Database Layer**: Automatic table creation on startup. Safe fallback to SQLite for zero-configuration local evaluation, with out-of-the-box PostgreSQL support via `DATABASE_URL`.
-- **Environment Isolation**: No hardcoded passwords, tokens, or paths. Configured via `.env` with `.env.example` templates.
-- **Safe CSV Ingestion**: Server-side file validation, memory caps, automatic timestamp parsing, missing-value interpolation, and duplicate detection.
+License
+No license has been specified in this README. Add a LICENSE file and
+update this section before permitting others to reuse, modify, or
+distribute the project.
 
----
-
-## 📜 Academic Major Project Compliance
-Developed as a production-grade university capstone major project adhering to rigorous software engineering, machine learning rigor, time-series validation principles, and modern enterprise UI/UX standards.
-#   E c o M i n d - A I  
- #   E c o M i n d - A I  
- 
+⋮⋮⋮⋮⋮⋮⋮⋮⋮⋮⋮⋮
