@@ -188,4 +188,5 @@ npm test
 ## 📜 Academic Major Project Compliance
 Developed as a production-grade university capstone major project adhering to rigorous software engineering, machine learning rigor, time-series validation principles, and modern enterprise UI/UX standards.
 #   E c o M i n d - A I  
+ #   E c o M i n d - A I  
  
